@@ -1,0 +1,17 @@
+<div class="object-detection-container">
+    <!-- Contêiner para o feed de vídeo e o canvas -->
+    <div class="video-canvas-wrapper">
+        <!-- Vídeo da câmera -->
+        <video #webcam autoplay muted width="640" height="480"></video>
+
+        <!-- Canvas sobreposto ao vídeo para exibir detecções -->
+        <canvas width="640" height="480"></canvas>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+        <p>Detecção de Objetos com TensorFlow</p>
+        <button (click)="startDetection()" disabled>Iniciar Detecção</button>
+        <button (click)="stopDetection()" disabled>Parar Detecção</button>
+    </div>
+</div>
