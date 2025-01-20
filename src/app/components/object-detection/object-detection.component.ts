@@ -10,6 +10,7 @@ import * as tf from '@tensorflow/tfjs';
 export class ObjectDetectionComponent implements AfterViewInit {
     @ViewChild('webcam', { static: false }) webcamElement: ElementRef<HTMLVideoElement>;
     private model: any;
+    private detectionInterval: any;
 
     async ngAfterViewInit() {
         this.model = await cocoSsd.load();
@@ -21,28 +22,36 @@ export class ObjectDetectionComponent implements AfterViewInit {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
         video.onloadedmetadata = () => video.play();
-        video.addEventListener('play', () => this.detectObjects(video));
     }
 
-    private async detectObjects(video: HTMLVideoElement) {
+    public async startDetection() {
+        const video = this.webcamElement.nativeElement;
         const canvas = video.nextElementSibling as HTMLCanvasElement;
         const ctx = canvas.getContext('2d');
 
         if (ctx) {
-            setInterval(async () => {
+            this.detectionInterval = setInterval(async () => {
                 const predictions = await this.model.detect(video);
+
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 predictions.forEach((p: any) => {
-                    ctx.strokeStyle = '#FF0000';
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(p.bbox[0], p.bbox[1], p.bbox[2], p.bbox[3]);
-                    ctx.fillText(p.class, p.bbox[0], p.bbox[1] - 5);
+                    // Aqui estamos filtrando objetos que NÃO sejam pessoas
+                    if (p.class !== 'person') {
+                        ctx.strokeStyle = '#FF0000';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(p.bbox[0], p.bbox[1], p.bbox[2], p.bbox[3]);
+                        ctx.fillStyle = '#FF0000';
+                        ctx.fillText(p.class, p.bbox[0], p.bbox[1] - 5);
+                    }
                 });
-            }, 500);
-        } else {
-            console.error('Erro ao acessar o contexto do canvas.');
+            }, 50);
         }
     }
 
+    public stopDetection() {
+        if (this.detectionInterval) {
+            clearInterval(this.detectionInterval);
+        }
+    }
 }
