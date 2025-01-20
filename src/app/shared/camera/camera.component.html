@@ -1,0 +1,20 @@
+<div class="camera-container">
+    <!-- Botão para ligar/desligar a câmera -->
+    <div class="controls">
+        <button (click)="startCamera()" [disabled]="isCameraActive">Ativar Câmera</button>
+        <button (click)="stopCamera()" [disabled]="!isCameraActive">Desativar Câmera</button>
+    </div>
+
+    <!-- Vídeo da câmera -->
+    <div class="video-container">
+        <video #webcam autoplay muted width="640" height="480"></video>
+    </div>
+
+    <!-- Botões para selecionar os módulos de detecção -->
+    <div class="modules">
+        <button routerLink="/object-detection" [disabled]="!isCameraActive">Detecção de Objetos</button>
+        <button routerLink="/hand-detection" [disabled]="!isCameraActive">Reconhecimento de Mãos</button>
+        <button routerLink="/pose-detection" [disabled]="!isCameraActive">Reconhecimento Corporal</button>
+        <button routerLink="/face-detection" [disabled]="!isCameraActive">Reconhecimento Facial</button>
+    </div>
+</div>
