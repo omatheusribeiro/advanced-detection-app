@@ -45,7 +45,7 @@ export class PoseDetectionComponent implements AfterViewInit {
                         }
                     });
                 });
-            }, 500);
+            }, 50);
         } else {
             console.error('Erro ao acessar o contexto do canvas.');
         }
