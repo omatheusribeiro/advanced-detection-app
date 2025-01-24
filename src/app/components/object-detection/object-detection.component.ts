@@ -38,10 +38,10 @@ export class ObjectDetectionComponent implements AfterViewInit {
                 predictions.forEach((p: any) => {
                     // Aqui estamos filtrando objetos que NÃO sejam pessoas
                     if (p.class !== 'person') {
-                        ctx.strokeStyle = '#FF0000';
+                        ctx.strokeStyle = 'purple';
                         ctx.lineWidth = 2;
                         ctx.strokeRect(p.bbox[0], p.bbox[1], p.bbox[2], p.bbox[3]);
-                        ctx.fillStyle = '#FF0000';
+                        ctx.fillStyle = 'purple';
                         ctx.fillText(p.class, p.bbox[0], p.bbox[1] - 5);
                     }
                 });
