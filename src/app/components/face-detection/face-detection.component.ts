@@ -48,41 +48,50 @@ export class FaceDetectionComponent implements AfterViewInit {
                     ctx.drawImage(video, 0, 0, canvas.width, canvas.height); // Desenhar o vídeo no canvas
 
                     predictions.forEach((prediction: any) => {
-                        if (!prediction || prediction.landmarks.length < 5) {
-                            console.error('Landmarks insuficientes para detecção de olhos');
-                            return;
+                        const [x1, y1] = prediction.topLeft; // Coordenadas do canto superior esquerdo
+                        const [x2, y2] = prediction.bottomRight; // Coordenadas do canto inferior direito
+
+                        const width = x2 - x1; // Largura do rosto
+                        const height = y2 - y1; // Altura do rosto
+
+                        // Estimar a idade com base na largura e altura do rosto
+                        let approximateAge = 30; // Valor base para estimativa
+                        const faceRatio = width / height;
+
+                        if (faceRatio > 0.9) {
+                            approximateAge -= 5; // Rostos mais largos tendem a ser mais jovens
+                        } else if (faceRatio < 0.7) {
+                            approximateAge += 5; // Rostos mais alongados tendem a ser mais velhos
                         }
 
-                        const [x, y, width, height] = prediction.topLeft.concat(prediction.bottomRight)
-                            .map((coord: number[], i: number) => (i % 2 === 0 ? coord[0] : coord[1]));
+                        approximateAge = Math.max(18, Math.min(60, Math.floor(approximateAge))); // Limitar a idade entre 18 e 60
 
-                        // Desenhar contorno ao redor do rosto
-                        ctx.strokeStyle = '#FF0000';
+                        // Identificar expressão facial
+                        const expression = this.detectExpression(prediction.landmarks);
+
+                        // Exibir a idade abaixo do retângulo
+                        ctx.font = '16px Arial';
+                        ctx.fillStyle = 'purple';
+                        ctx.fillText(`Idade: ${approximateAge}`, x1, y2 + 20); // Texto logo abaixo do retângulo
+
+                        // Exibir a expressão dentro do retângulo
+                        ctx.fillText(`Expressão: ${expression}`, x1, y2 + 40); // Texto logo abaixo da idade
+
+                        // Desenhar o retângulo ao redor do rosto
+                        ctx.strokeStyle = 'purple';
                         ctx.lineWidth = 2;
-                        ctx.strokeRect(x, y, width - x, height - y);
+                        ctx.strokeRect(x1, y1, width, height);
 
-                        // Desenhar keypoints e calcular a idade aproximada
+                        // Desenhar landmarks
                         prediction.landmarks.forEach(([px, py]: [number, number]) => {
-                            ctx.fillStyle = 'blue';
+                            ctx.fillStyle = 'purple';
                             ctx.beginPath();
-                            ctx.arc(px, py, 3, 0, Math.PI * 2);
+                            ctx.arc(px, py, 3, 0, Math.PI * 1.5);
                             ctx.fill();
                         });
-
-                        // Calcular a idade com base na largura da face
-                        const faceWidth = width - x;
-                        const approximateAge = Math.max(18, Math.min(60, Math.floor(faceWidth * 0.5))); // Exemplo de cálculo simples
-                        ctx.font = '14px Arial';
-                        ctx.fillStyle = 'black';
-                        ctx.fillText(`Age: 20`, x, y - 10); // Mostra a idade acima do rosto
-
-                        // Identificar a expressão facial
-                        const eyeDistances: [number, number][][] = this.calculateEyeDistance(prediction.landmarks);
-                        if (eyeDistances.length > 0) {
-                            const expression = this.detectExpression(eyeDistances);
-                            ctx.fillText(`Expression: ${expression}`, x, y - 30); // Mostra a expressão facial abaixo da idade
-                        }
                     });
+
+
                 } catch (error) {
                     console.error('Erro ao estimar faces:', error);
                 }
@@ -92,44 +101,28 @@ export class FaceDetectionComponent implements AfterViewInit {
         }
     }
 
-
-    private calculateEyeDistance(landmarks: number[][]): any {
-        try {
-            const leftEye: number[][] = landmarks.slice(0, 6).map(coord => [coord[0], coord[1]]);  // Extrair o par [x, y]
-            const rightEye: number[][] = landmarks.slice(6, 12).map(coord => [coord[0], coord[1]]);  // Extrair o par [x, y]
-
-            return [leftEye, rightEye];
-        } catch (error) {
-            console.error('Erro ao calcular a distância dos olhos:', error);
-            return [];
-        }
-    }
-
-
-
-
-
-    private detectExpression(eyeDistances: [number, number][][]) {
-        const [leftEye, rightEye] = eyeDistances;
-
-        const leftEyeWidth = Math.abs(leftEye?.[0]?.[0] - rightEye?.[0]?.[0]);
-        const leftEyeHeight = Math.abs(leftEye?.[0]?.[1] - rightEye?.[0]?.[1]);
-        const rightEyeWidth = Math.abs(leftEye?.[1]?.[0] - rightEye?.[1]?.[0]);
-        const rightEyeHeight = Math.abs(leftEye?.[1]?.[1] - rightEye?.[1]?.[1]);
-
-        if (leftEyeWidth === 0 || leftEyeHeight === 0 || rightEyeWidth === 0 || rightEyeHeight === 0) {
-            return 'Neutral';  // Retorna Neutral se os olhos não puderem ser detectados
+    private detectExpression(landmarks: [number, number][]): string {
+        // Verificar se existem landmarks suficientes
+        if (landmarks.length < 6) {
+            console.error('Número insuficiente de landmarks para detectar expressões.');
+            return 'Neutro';
         }
 
-        const eyeRatio = (leftEyeWidth / leftEyeHeight) + (rightEyeWidth / rightEyeHeight) / 2;
+        // Coordenadas dos landmarks relevantes
+        const [leftEye, rightEye, nose, mouthLeft, mouthRight, mouthBottom] = landmarks;
 
-        if (eyeRatio > 2.5) {
-            return 'Happy';
-        } else if (eyeRatio < 2.0) {
-            return 'Sad';
+        // Calcular distâncias para análise
+        const mouthWidth = Math.abs(mouthRight[0] - mouthLeft[0]); // Largura da boca
+        const mouthHeight = Math.abs(mouthBottom[1] - nose[1]); // Altura da boca (distância do nariz ao centro inferior da boca)
+        const eyeDistance = Math.abs(rightEye[0] - leftEye[0]); // Distância entre os olhos
+
+        // Lógica para determinar a expressão
+        if (mouthHeight > 15 && mouthWidth > eyeDistance * 0.5) {
+            return 'Feliz'; // Boca aberta e larga
+        } else if (mouthHeight < 10 && mouthWidth < eyeDistance * 0.4) {
+            return 'Triste'; // Boca pequena e fechada
         } else {
-            return 'Neutral';
+            return 'Neutro'; // Caso padrão
         }
     }
-
 }
