@@ -38,23 +38,23 @@ export class HandDetectionComponent implements AfterViewInit {
     const canvas = video.nextElementSibling as HTMLCanvasElement;
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      setInterval(async () => {
+      const detect = async () => {
         try {
           const predictions = await this.model.estimateHands(video);
-          ctx.drawImage(video, 0, 0, ctx.canvas.width, ctx.canvas.height);
+          ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpar o canvas antes de desenhar
 
           predictions.forEach((hand: any) => {
             // Desenhar cada ponto de landmark
             hand.landmarks.forEach(([x, y]: [number, number]) => {
-              ctx.fillStyle = 'blue';
+              ctx.fillStyle = 'purple';
               ctx.beginPath();
-              ctx.arc(x, y, 5, 0, Math.PI * 2);
+              ctx.arc(x, y, 5, 0, Math.PI * 1.5);
               ctx.fill();
             });
 
             // Adicionar traços entre os landmarks
             if (hand.landmarks.length > 1) {
-              ctx.strokeStyle = 'green';
+              ctx.strokeStyle = 'purple';
               ctx.lineWidth = 2;
               ctx.beginPath();
               ctx.moveTo(hand.landmarks[0][0], hand.landmarks[0][1]); // Primeiro ponto
@@ -69,10 +69,12 @@ export class HandDetectionComponent implements AfterViewInit {
         } catch (error) {
           console.error('Erro ao estimar mãos:', error);
         }
-      }, 50);  // Atualização do canvas a cada 50ms
+        requestAnimationFrame(detect); // Continuar detectando no próximo quadro
+      };
+
+      detect(); // Iniciar a detecção
     } else {
       console.error('Não foi possível obter o contexto 2D do canvas.');
     }
   }
-
 }
