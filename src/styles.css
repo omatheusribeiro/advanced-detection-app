@@ -109,12 +109,6 @@ header .container {
     -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
 
-/* .div-video{
-    width: 350px;
-    border-radius: 10px; 
-    overflow: hidden; 
-} */
-
 .logo h3 {
   color: var(--darkTwo);
   font-size: 1.55rem;
