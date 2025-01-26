@@ -103,7 +103,8 @@ header .container {
 }
 
 .video{
-    width: 500px;
+    width: 640px;
+    height: 480px;
     background: #000;
     border-radius: 10px;
     -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);

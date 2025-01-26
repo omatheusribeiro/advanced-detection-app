@@ -12,7 +12,7 @@ import { FaceDetectionComponent } from './components/face-detection/face-detecti
   selector: 'app-root',
   imports: [RouterOutlet, CameraComponent, WebcamDirective, HandDetectionComponent, PoseDetectionComponent, ObjectDetectionComponent, FaceDetectionComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['/app.component.css']
 })
 export class AppComponent {
   title = 'advanced-detection-app';

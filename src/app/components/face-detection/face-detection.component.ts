@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import * as blazeface from '@tensorflow-models/blazeface';
 import * as tf from '@tensorflow/tfjs';
 
@@ -10,6 +10,8 @@ import * as tf from '@tensorflow/tfjs';
 export class FaceDetectionComponent implements AfterViewInit {
     @ViewChild('webcam', { static: false }) webcamElement!: ElementRef<HTMLVideoElement>;
     @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
+    @Input() classVideo: string;
+
     private model: any;
 
     async ngAfterViewInit() {
