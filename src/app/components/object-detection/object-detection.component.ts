@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 import * as tf from '@tensorflow/tfjs';
 
@@ -9,6 +9,8 @@ import * as tf from '@tensorflow/tfjs';
 })
 export class ObjectDetectionComponent implements AfterViewInit {
     @ViewChild('webcam', { static: false }) webcamElement: ElementRef<HTMLVideoElement>;
+    @Input() classVideo: string;
+
     private model: any;
     private detectionInterval: any;
 
