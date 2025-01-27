@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
 import * as handpose from '@tensorflow-models/handpose';
 import * as tf from '@tensorflow/tfjs';
 
@@ -9,6 +9,8 @@ import * as tf from '@tensorflow/tfjs';
 })
 export class HandDetectionComponent implements AfterViewInit {
   @ViewChild('webcam', { static: true }) webcamElement: ElementRef<HTMLVideoElement>;
+  @Input() classVideo: string;
+
   private model: any;
 
   async ngAfterViewInit() {
