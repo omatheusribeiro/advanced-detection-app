@@ -51,10 +51,4 @@ export class ObjectDetectionComponent implements AfterViewInit {
             }, 50);
         }
     }
-
-    public stopDetection() {
-        if (this.detectionInterval) {
-            clearInterval(this.detectionInterval);
-        }
-    }
 }
