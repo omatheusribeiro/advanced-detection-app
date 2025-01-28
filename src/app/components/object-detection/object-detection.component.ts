@@ -24,6 +24,7 @@ export class ObjectDetectionComponent implements AfterViewInit {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
         video.onloadedmetadata = () => video.play();
+        this.startDetection();
     }
 
     public async startDetection() {
