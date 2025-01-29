@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular/core';
-import * as posedetection from '@tensorflow-models/pose-detection';
-import * as tf from '@tensorflow/tfjs';
+import * as posenet from '@tensorflow-models/posenet';
 
 @Component({
     selector: 'app-pose-detection',
@@ -8,48 +7,91 @@ import * as tf from '@tensorflow/tfjs';
     styleUrls: ['./pose-detection.component.css']
 })
 export class PoseDetectionComponent implements AfterViewInit {
-    @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
-    @ViewChild('webcam', { static: false }) webcamElement!: ElementRef<HTMLVideoElement>;
+    @ViewChild('webcam') videoRef!: ElementRef;
+    @ViewChild('canvas') canvasRef!: ElementRef;
     @Input() classVideo: string;
 
-    private model: any;
-
-    async ngAfterViewInit() {
-        this.model = await posedetection.createDetector(posedetection.SupportedModels.MoveNet);
-        const video = this.webcamElement.nativeElement;
-        this.startVideo(video);
+    ngAfterViewInit(): void {
+        this.startVideo();
     }
 
-    private async startVideo(video: HTMLVideoElement) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        video.onloadedmetadata = () => video.play();
-        video.addEventListener('play', () => this.detectPoses(video));
-    }
-
-    private async detectPoses(video: HTMLVideoElement) {
-        const canvas = this.canvasElement.nativeElement;
-        const ctx = canvas.getContext('2d');
-
-        if (ctx) {
-            setInterval(async () => {
-                const poses = await this.model.estimatePoses(video);
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                poses.forEach((pose: any) => {
-                    pose.keypoints.forEach(({ x, y, score }: any) => {
-                        if (score > 0.5) {
-                            ctx.fillStyle = 'green';
-                            ctx.beginPath();
-                            ctx.arc(x, y, 5, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    });
-                });
-            }, 50);
-        } else {
-            console.error('Erro ao acessar o contexto do canvas.');
+    async startVideo() {
+        try {
+            const video = this.videoRef.nativeElement;
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            video.onloadedmetadata = () => video.play();
+            video.addEventListener('play', () => this.runPosenet());
+        } catch (error) {
+            console.error('Error starting webcam:', error);
         }
     }
 
+    async runPosenet() {
+        const net = await posenet.load({
+            inputResolution: { width: 640, height: 480 },
+            quantBytes: 2, // Opcional: Reduz o tamanho do modelo carregado
+            architecture: "MobileNetV1", // Opcional: Define a arquitetura do modelo
+            outputStride: 16, // Define a precisão da saída
+          });
+          
+
+        setInterval(() => {
+            this.detect(net);
+        }, 100);
+    }
+
+    async detect(net: any) {
+        const video = this.videoRef.nativeElement;
+
+        if (video.readyState === 4) {
+            const videoWidth = video.videoWidth;
+            const videoHeight = video.videoHeight;
+
+            video.width = videoWidth;
+            video.height = videoHeight;
+
+            const pose = await net.estimateSinglePose(video);
+            console.log(pose);
+
+            this.drawCanvas(pose, videoWidth, videoHeight);
+        }
+    }
+
+    drawCanvas(pose: any, videoWidth: number, videoHeight: number) {
+        const canvas = this.canvasRef.nativeElement;
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
+
+        drawKeypoints(pose['keypoints'], 0.6, ctx);
+        drawSkeleton(pose['keypoints'], 0.7, ctx);
+    }
 }
+
+export const drawKeypoints = (keypoints: any, minConfidence: number, ctx: CanvasRenderingContext2D) => {
+    keypoints.forEach((keypoint: any) => {
+      if (keypoint.score >= minConfidence) {
+        const { x, y } = keypoint.position;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+      }
+    });
+  };
+  
+  export const drawSkeleton = (keypoints: any, minConfidence: number, ctx: CanvasRenderingContext2D) => {
+    const adjacentKeyPoints = posenet.getAdjacentKeyPoints(keypoints, minConfidence);
+    
+    adjacentKeyPoints.forEach(([start, end] : any) => {
+      ctx.beginPath();
+      ctx.moveTo(start.position.x, start.position.y);
+      ctx.lineTo(end.position.x, end.position.y);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'blue';
+      ctx.stroke();
+    });
+  };
+  
