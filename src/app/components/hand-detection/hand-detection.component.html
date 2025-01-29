@@ -1,10 +1,16 @@
 <div class="hand-detection-container">
-    <!-- Contêiner para o feed de vídeo e o canvas -->
+    <!-- Container for the video feed and canvas -->
     <div class="video-canvas-wrapper">
-        <!-- Vídeo da câmera -->
-        <video #webcam autoplay muted width="640" height="480" class={{classVideo}}></video>
+        <video #webcam autoplay playsinline style="
+          z-index: 9;
+          width: 640px;
+          height: 480px;
+        "></video>
 
-        <!-- Canvas sobreposto ao vídeo para exibir detecções -->
-        <canvas width="640" height="480"></canvas>
+        <canvas #canvas style="
+          z-index: 9;
+          width: 640px;
+          height: 480px;
+        "></canvas>
     </div>
 </div>
