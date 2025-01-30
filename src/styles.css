@@ -100,6 +100,7 @@ header .container {
 .div-video{
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
 .video{

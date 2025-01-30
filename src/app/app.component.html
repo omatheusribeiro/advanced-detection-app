@@ -40,7 +40,28 @@
                 </div>
 
                 <div class="div-video" id="div-video">
-                    <app-pose-detection classVideo="video"></app-pose-detection>
+                    <app-face-detection classVideo="video"></app-face-detection>
+                    <div class="form-check form-switch d-flex justify-content-between" style="margin-top: 10px;">
+                        <div>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Face Detection</label>
+                        </div>
+
+                        <div>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Object Detection</label>
+                        </div>
+
+                        <div>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Hand Detection</label>
+                        </div>
+
+                        <div>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Pose Detection</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
