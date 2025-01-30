@@ -44,12 +44,14 @@
                 <div class="div-video" id="div-video">
                     <app-face-detection classVideo="video"></app-face-detection>
                     <div class="form-check form-switch d-flex flex-column gap-2 mt-3">
-                        <div *ngFor="let switchItem of switches; let i = index">
-                            <input class="form-check-input" type="checkbox" role="switch" [id]="switchItem.id"
-                                [checked]="switchItem.checked" (change)="toggleSwitch(i)">
-                            <label class="form-check-label" [for]="switchItem.id">
-                                {{ switchItem.label }}
-                            </label>
+                        <div class="d-flex justify-content-between">
+                            <div *ngFor="let switchItem of switches; let i = index">
+                                <input class="form-check-input" type="checkbox" role="switch" [id]="switchItem.id"
+                                    [checked]="switchItem.checked" (change)="toggleSwitch(i)">
+                                <label class="form-check-label" [for]="switchItem.id">
+                                    {{ switchItem.label }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
