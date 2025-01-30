@@ -42,7 +42,11 @@
                 </div>
 
                 <div class="div-video" id="div-video">
-                    <app-face-detection classVideo="video"></app-face-detection>
+                    <app-face-detection classVideo="video" *ngIf="activeComponent == 'face-detection'"></app-face-detection>
+                    <app-object-detection classVideo="video" *ngIf="activeComponent == 'object-detection'"></app-object-detection>
+                    <app-hand-detection classVideo="video" *ngIf="activeComponent == 'hand-detection'"></app-hand-detection>
+                    <app-pose-detection classVideo="video" *ngIf="activeComponent == 'pose-detection'"></app-pose-detection>
+                
                     <div class="form-check form-switch d-flex flex-column gap-2 mt-3">
                         <div class="d-flex justify-content-between">
                             <div *ngFor="let switchItem of switches; let i = index">

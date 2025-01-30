@@ -25,10 +25,14 @@ export class AppComponent {
     { id: 'pose-detection', label: 'Pose Detection', checked: false }
   ];
 
+  activeComponent: string | null = 'face-detection';
+
   toggleSwitch(selectedIndex: number) {
     this.switches = this.switches.map((switchItem, index) => ({
       ...switchItem,
-      checked: index === selectedIndex // Ativa apenas o switch clicado
+      checked: index === selectedIndex
     }));
+
+    this.activeComponent = this.switches[selectedIndex].checked ? this.switches[selectedIndex].id : null;
   }
 }
