@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 import { CameraComponent } from './shared/camera/camera.component';
@@ -10,10 +11,24 @@ import { FaceDetectionComponent } from './components/face-detection/face-detecti
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CameraComponent, WebcamDirective, HandDetectionComponent, PoseDetectionComponent, ObjectDetectionComponent, FaceDetectionComponent],
+  imports: [CommonModule, RouterOutlet, CameraComponent, WebcamDirective, HandDetectionComponent, PoseDetectionComponent, ObjectDetectionComponent, FaceDetectionComponent],
   templateUrl: './app.component.html',
   styleUrls: ['/app.component.css']
 })
 export class AppComponent {
   title = 'advanced-detection-app';
+
+  switches = [
+    { id: 'face-detection', label: 'Face Detection', checked: true },
+    { id: 'object-detection', label: 'Object Detection', checked: false },
+    { id: 'hand-detection', label: 'Hand Detection', checked: false },
+    { id: 'pose-detection', label: 'Pose Detection', checked: false }
+  ];
+
+  toggleSwitch(selectedIndex: number) {
+    this.switches = this.switches.map((switchItem, index) => ({
+      ...switchItem,
+      checked: index === selectedIndex // Ativa apenas o switch clicado
+    }));
+  }
 }

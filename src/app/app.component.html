@@ -32,34 +32,24 @@
                         <h1>have the experience of using an AI with different functionalities.</h1>
                     </div>
                     <p class="text">
-                        In this project you will be able to use artificial intelligence capable of identifying the user's hands, objects, body movement and finally, facial detection.
+                        In this project you will be able to use artificial intelligence capable of identifying the
+                        user's hands, objects, body movement and finally, facial detection.
                     </p>
                     <div class="cta">
-                        <a href="https://github.com/omatheusribeiro/advanced-detection-app" target="_blank" class="btn">Repository</a>
+                        <a href="https://github.com/omatheusribeiro/advanced-detection-app" target="_blank"
+                            class="btn">Repository</a>
                     </div>
                 </div>
 
                 <div class="div-video" id="div-video">
                     <app-face-detection classVideo="video"></app-face-detection>
-                    <div class="form-check form-switch d-flex justify-content-between" style="margin-top: 10px;">
-                        <div>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Face Detection</label>
-                        </div>
-
-                        <div>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Object Detection</label>
-                        </div>
-
-                        <div>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Hand Detection</label>
-                        </div>
-
-                        <div>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                            <label class="form-check-label" for="flexSwitchCheckDefault">Pose Detection</label>
+                    <div class="form-check form-switch d-flex flex-column gap-2 mt-3">
+                        <div *ngFor="let switchItem of switches; let i = index">
+                            <input class="form-check-input" type="checkbox" role="switch" [id]="switchItem.id"
+                                [checked]="switchItem.checked" (change)="toggleSwitch(i)">
+                            <label class="form-check-label" [for]="switchItem.id">
+                                {{ switchItem.label }}
+                            </label>
                         </div>
                     </div>
                 </div>
