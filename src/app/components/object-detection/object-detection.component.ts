@@ -39,7 +39,7 @@ export class ObjectDetectionComponent implements AfterViewInit {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                 predictions.forEach((p: any) => {
-                    // Aqui estamos filtrando objetos que NÃO sejam pessoas
+                    // Here we are filtering objects that are NOT people
                     ctx.strokeStyle = '#64bcf4';
                     ctx.lineWidth = 2;
                     ctx.strokeRect(p.bbox[0], p.bbox[1], p.bbox[2], p.bbox[3]);

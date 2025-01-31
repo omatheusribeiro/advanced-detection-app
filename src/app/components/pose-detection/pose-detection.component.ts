@@ -2,14 +2,14 @@ import { Component, ElementRef, ViewChild, AfterViewInit, Input } from '@angular
 import * as posenet from '@tensorflow-models/posenet';
 
 @Component({
-    selector: 'app-pose-detector',
-    templateUrl: './pose-detector.component.html',
-    styleUrls: ['./pose-detector.component.css']
+    selector: 'app-pose-detection',
+    templateUrl: './pose-detection.component.html',
+    styleUrls: ['./pose-detection.component.css']
 })
 export class PoseDetectionComponent implements AfterViewInit {
     @ViewChild('webcam') videoRef!: ElementRef;
     @ViewChild('canvas') canvasRef!: ElementRef;
-    @Input() videoClass: string;
+    @Input() classVideo: string;
 
     ngAfterViewInit(): void {
         this.startVideo();
