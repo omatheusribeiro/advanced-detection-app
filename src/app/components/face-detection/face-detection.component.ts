@@ -73,20 +73,20 @@ export class FaceDetectionComponent implements AfterViewInit {
 
                         // Exibir a idade abaixo do retângulo
                         ctx.font = '16px Arial';
-                        ctx.fillStyle = 'purple';
+                        ctx.fillStyle = '#64bcf4';
                         ctx.fillText(`Idade: ${approximateAge}`, x1, y2 + 20); // Texto logo abaixo do retângulo
 
                         // Exibir a expressão dentro do retângulo
                         ctx.fillText(`Expressão: ${expression}`, x1, y2 + 40); // Texto logo abaixo da idade
 
                         // Desenhar o retângulo ao redor do rosto
-                        ctx.strokeStyle = 'purple';
+                        ctx.strokeStyle = '#64bcf4';
                         ctx.lineWidth = 2;
                         ctx.strokeRect(x1, y1, width, height);
 
                         // Desenhar landmarks
                         prediction.landmarks.forEach(([px, py]: [number, number]) => {
-                            ctx.fillStyle = 'purple';
+                            ctx.fillStyle = '#64bcf4';
                             ctx.beginPath();
                             ctx.arc(px, py, 3, 0, Math.PI * 1.5);
                             ctx.fill();
