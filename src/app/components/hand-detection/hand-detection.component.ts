@@ -72,7 +72,7 @@ export const drawHands = (predictions: any, ctx: CanvasRenderingContext2D) => {
         const [x, y] = landmarks[i];
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle at each point
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = '#64bcf4';
         ctx.fill();
       }
 
@@ -86,7 +86,7 @@ export const drawHands = (predictions: any, ctx: CanvasRenderingContext2D) => {
       ];
 
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'blue';
+      ctx.strokeStyle = '#2a7fb5';
 
       connections.forEach(([start, end]) => {
         ctx.beginPath();
