@@ -76,7 +76,7 @@ export const drawKeypoints = (keypoints: any, minConfidence: number, ctx: Canvas
         const { x, y } = keypoint.position;
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, 2 * Math.PI);
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = '#64bcf4';
         ctx.fill();
       }
     });
@@ -90,7 +90,7 @@ export const drawKeypoints = (keypoints: any, minConfidence: number, ctx: Canvas
       ctx.moveTo(start.position.x, start.position.y);
       ctx.lineTo(end.position.x, end.position.y);
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'blue';
+      ctx.strokeStyle = '#2a7fb5';
       ctx.stroke();
     });
   };
