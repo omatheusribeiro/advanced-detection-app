@@ -52,9 +52,6 @@ Then open your browser and go to: **http://localhost:4200/** 🚀
 - **TypeScript**
 - **HTML & CSS**
 
-## 🤝 Contributing
-Contributions are welcome! Feel free to fork the project and submit pull requests.
-
 ## 📜 License
-This project is licensed under the GNU GENERAL PUBLIC LICENSE.
+This project is licensed under the GPL-2.0 License.
 
