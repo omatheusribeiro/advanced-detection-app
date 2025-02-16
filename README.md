@@ -6,7 +6,7 @@ The **Advanced Detection Application** was built as a way to advance knowledge i
 ✅ **Face Detection**
 ✅ **Object Detection**
 ✅ **Pose Detection**
-✅ **Hand Movement Detection**
+✅ **Hand Movement Detection** 
 
 ## 🏗️ Project Structure
 ```
